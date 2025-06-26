@@ -18,9 +18,18 @@ function changeBackground() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Start slideshow
+  // Slideshow
   changeBackground();
   setInterval(changeBackground, 5000);
+
+  // Hamburger Menu Toggle
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('show');
+    });
+  }
 
   // Cart logic
   const cart = [];
@@ -45,39 +54,39 @@ document.addEventListener('DOMContentLoaded', () => {
   buttons.forEach(button => {
     button.addEventListener('click', () => {
       const name = button.dataset.name;
-      const price = 45;
+      const price = 45; // You might want to update this to pull actual prices
       cart.push({ name, price });
       updateCart();
       window.location.href = '#cart';
     });
   });
 
- // Contact form
-const contactForm = document.getElementById('contact-form') || document.querySelector("form");
-contactForm.addEventListener('submit', e => {
-  e.preventDefault();
-    alert('Your request has been granted, we will notify you soon.');
-  contactForm.reset();
-});
-});
+  // Contact Form (only handles forms that exist)
+  const contactForm = document.getElementById('contact-form') || document.querySelector("form");
+  if (contactForm) {
+    contactForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
 
-const contactForm = document.getElementById('contact-form');
+      const formData = new FormData(contactForm);
 
-contactForm.addEventListener('submit', async function (e) {
-  e.preventDefault();
-  const formData = new FormData(contactForm);
-  const response = await fetch(contactForm.action, {
-    method: 'POST',
-    body: formData,
-    headers: {
-      'Accept': 'application/json'
-    }
-  });
+      try {
+        const response = await fetch(contactForm.action || '#', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
 
-  if (response.ok) {
-    alert('Your request has been granted, we will notify you soon.');
-    contactForm.reset();
-  } else {
-    alert('Oops! Something went wrong. Please try again later.');
+        if (response.ok) {
+          alert('Your request has been granted, we will notify you soon.');
+          contactForm.reset();
+        } else {
+          alert('Oops! Something went wrong. Please try again later.');
+        }
+      } catch (err) {
+        alert('Network error. Please check your connection and try again.');
+      }
+    });
   }
 });
