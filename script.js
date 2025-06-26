@@ -52,11 +52,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Contact form
-  const contactForm = document.getElementById('contact-form') || document.querySelector("form");
-  contactForm.addEventListener('submit', e => {
-    e.preventDefault();
-    alert('Thank you for your responds, this may take a while, we will get back to u soon. Stay Tuned');
-    contactForm.reset();
+ // Contact form
+const contactForm = document.getElementById('contact-form') || document.querySelector("form");
+contactForm.addEventListener('submit', e => {
+  e.preventDefault();
+    alert('Your request has been granted, we will notify you soon.');
+  contactForm.reset();
+});
+});
+
+const contactForm = document.getElementById('contact-form');
+
+contactForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const formData = new FormData(contactForm);
+  const response = await fetch(contactForm.action, {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'Accept': 'application/json'
+    }
   });
+
+  if (response.ok) {
+    alert('Your request has been granted, we will notify you soon.');
+    contactForm.reset();
+  } else {
+    alert('Oops! Something went wrong. Please try again later.');
+  }
 });
